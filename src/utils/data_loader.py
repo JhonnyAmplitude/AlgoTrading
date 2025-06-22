@@ -44,11 +44,16 @@ class BybitClient:
         if not data:
             return pd.DataFrame(columns=["open_time", "open", "high", "low", "close", "volume"])
 
-        df = pd.DataFrame(data, columns=["open_time", "open", "high", "low", "close", "volume"])
-        df["open_time"] = pd.to_datetime(df["open_time"], unit="ms")
+        # Bybit возвращает 7 полей: timestamp, open, high, low, close, volume, turnover
+        df = pd.DataFrame(data, columns=["open_time", "open", "high", "low", "close", "volume", "turnover"])
+
+        # Преобразуем типы
+        df["open_time"] = pd.to_datetime(df["open_time"].astype("int64"), unit="ms")
         for col in ["open", "high", "low", "close", "volume"]:
             df[col] = df[col].astype(float)
-        return df
+
+        # Возвращаем только нужные колонки
+        return df[["open_time", "open", "high", "low", "close", "volume"]]
 
     def get_top10_symbols(self) -> list[str]:
         """
