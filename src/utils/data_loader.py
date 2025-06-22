@@ -94,4 +94,4 @@ if __name__ == "__main__":
     print("Base URL:", client.base_url)
     print("Top 10 symbols:", client.get_top10_symbols())
     df = client.get_klines("BTCUSDT", "1", 100)
-    print(df.head())
+    print(df.head(10))
